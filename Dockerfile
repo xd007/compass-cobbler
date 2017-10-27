@@ -1,4 +1,4 @@
-FROM compassindocker/systemd-base
+FROM compassindocker/centos-systemd
 ENV container docker
 VOLUME [ "/sys/fs/cgroup" ]
 
@@ -6,12 +6,8 @@ ADD . /root/compass-cobbler
 
 # pkgs and services...
 RUN yum -y update && \
-    yum -y install epel-release && \
-    yum -y install wget dhcp bind syslinux pykickstart file initscripts net-tools tcpdump xinetd vim avahi avahi-tools ntp && \
-    wget ftp://mirror.switch.ch/pool/4/mirror/fedora/linux/updates/22/armhfp/c/cobbler-2.6.10-1.fc22.noarch.rpm && \
-    wget ftp://mirror.switch.ch/pool/4/mirror/fedora/linux/updates/22/armhfp/c/cobbler-web-2.6.10-1.fc22.noarch.rpm && \
-    yum -y localinstall cobbler-2.6.10-1.fc22.noarch.rpm cobbler-web-2.6.10-1.fc22.noarch.rpm && \
-    rm -f cobbler-2.6.10-1.fc22.noarch.rpm cobbler-web-2.6.10-1.fc22.noarch.rpm && \
+    yum -y install epel-release && yum repolist && \
+    yum -y install wget dhcp bind syslinux pykickstart file initscripts net-tools tcpdump xinetd vim avahi avahi-tools ntp cobbler cobbler-web && \
     systemctl enable cobblerd && \
     systemctl enable httpd && \
     systemctl enable dhcpd && \
